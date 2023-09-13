@@ -6,7 +6,7 @@ import New from "./pages/New";
 import Edit from "./pages/Edit";
 import Diary from "./pages/Diary";
 
-import React, { useReducer, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 
 // Map 함수 : 향상된 for문이라고 생각하면 편함
 // filter 함수 : 배열의 요소를 순차적으로 순회하면서 조건에 일치하는 요소를 모아 새로운 배열을 반환
@@ -39,59 +39,17 @@ const reducer = (state, action) => {
       return state;
   }
 
+  localStorage.setItem("diary", JSON.stringify(newState));
   return newState;
 };
 
 export const DiaryStateContext = React.createContext();
 export const DiaryDispatchContext = React.createContext();
 
-const dummyData = [
-  {
-    id: 1,
-    emotion: 1,
-    content: "오늘의 일기 1번",
-    date: 1694502005515,
-  },
-  {
-    id: 2,
-    emotion: 2,
-    content: "오늘의 일기 2번",
-    date: 1694502005516,
-  },
-  {
-    id: 3,
-    emotion: 3,
-    content: "오늘의 일기 3번",
-    date: 1694502005517,
-  },
-  {
-    id: 4,
-    emotion: 4,
-    content: "오늘의 일기 4번",
-    date: 1694502005518,
-  },
-  {
-    id: 5,
-    emotion: 5,
-    content: "오늘의 일기 5번",
-    date: 1694502005519,
-  },
-  {
-    id: 6,
-    emotion: 6,
-    content: "오늘의 일기 6번",
-    date: 1694502005520,
-  },
-  {
-    id: 7,
-    emotion: 7,
-    content: "오늘의 일기 7번",
-    date: 1694502005521,
-  },
-];
-
+// localStrorage.getItem() 으로 가져오게 되면 스트링 형태로 가져오게 됨
+// 그래서 변환 필요
 function App() {
-  const [data, dispatch] = useReducer(reducer, dummyData);
+  const [data, dispatch] = useReducer(reducer, []);
 
   const dataId = useRef(0);
   // CREATE
@@ -134,7 +92,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/new" element={<New />} />
-              <Route path="/edit" element={<Edit />} />
+              <Route path="/edit/:id" element={<Edit />} />
               <Route path="/diary/:id" element={<Diary />} />
             </Routes>
           </div>
